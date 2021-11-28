@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>BigchainDB boilerplate</title>
+        <!-- Adjust version to your needs -->
+        <script src="https://unpkg.com/bigchaindb-driver@4.2.0/dist/browser/bigchaindb-driver.window.min.js"></script>
+
+        <script>
+            //const BigchainDB = require('bigchaindb-driver')
+
+            //const API_PATH = 'https://test.ipdb.io/api/v1/'
+            const API_PATH = 'http://localhost:9984/api/v1/'
+            const conn = new BigchainDB.Connection(API_PATH)
+
+            // const bip39 = require('bip39')
+
+            // //const seed = bip39.mnemonicToSeed('seedPhrase').then(console.log)
+            // const seed = bip39.mnemonicToSeedSync('seedPhrase').slice(0,32)
+            // console.log(seed)
+            //const alice = new BigchainDB.Ed25519Keypair(seed)
+            const alice = new BigchainDB.Ed25519Keypair()
+
+            const painting = {
+                name: 'Meninas',
+                author: 'Diego Rodríguez de Silva y Velázquez',
+                place: 'Madrid',
+                year: '1656'
+            }
+
+            function createPaint() {
+                // Construct a transaction payload
+                const txCreatePaint = BigchainDB.Transaction.makeCreateTransaction(
+                    // Asset field
+                    {
+                        //painting,
+                        name: 'Meninas',
+                        author: 'Diego Rodríguez de Silva y Velázquez',
+                        place: 'Madrid',
+                        year: '1656'
+                    },
+                    // Metadata field, contains information about the transaction itself
+                    // (can be `null` if not needed)
+                    {
+                        datetime: new Date().toString(),
+                        location: 'Madrid',
+                        value: {
+                            value_eur: '25000000€',
+                            value_btc: '2200',
+                        }
+                    },
+                    // Output. For this case we create a simple Ed25519 condition
+                    [BigchainDB.Transaction.makeOutput(
+                        BigchainDB.Transaction.makeEd25519Condition(alice.publicKey))],
+                    // Issuers
+                    alice.publicKey
+                )
+                // The owner of the painting signs the transaction
+                const txSigned = BigchainDB.Transaction.signTransaction(txCreatePaint,
+                    alice.privateKey)
+
+                // Send the transaction off to BigchainDB
+                conn.postTransactionCommit(txSigned)
+                    .then(res => {
+                        //document.body.innerHTML += '<h3>Transaction created</h3>';
+                        //document.body.innerHTML += txSigned.id
+                        // txSigned.id corresponds to the asset id of the painting
+                        const elem = document.getElementById('lastTransaction')
+                        //elem.href = API_PATH + 'transactions/' + txSigned.id
+                        elem.innerText = txSigned.id
+                        console.log('Transaction', txSigned.id, 'created')
+                    })
+            }
+
+            createPaint()
+
+        </script>
+    </head>
+    <body id="home">
+        <h1>Hello BigchainDB</h1>
+        <p>Your transaction id is: <a id="lastTransaction" target="_blank"><em>processing</em></a></p>
+    </body>
+</html>
