@@ -1,0 +1,18 @@
+{
+  "name": "ep2",
+  "version": "1.0.0",
+  "description": "A game trade system concept with bigchainDB",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bigchaindb-driver": "^4.2.2",
+    "bs58": "^4.0.1",
+    "crypto-conditions": "^2.1.2",
+    "prompt": "^1.2.0"
+  }
+}
