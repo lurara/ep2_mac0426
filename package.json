@@ -13,6 +13,7 @@
     "bigchaindb-driver": "^4.2.2",
     "bs58": "^4.0.1",
     "crypto-conditions": "^2.1.2",
+    "node-fetch": "^3.1.0",
     "prompt": "^1.2.0"
   }
 }

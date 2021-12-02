@@ -1,7 +1,7 @@
 
 import prompt from 'prompt'
 
-export default async function createItem() {
+export default async function createItem(user) {
     let emptyObject = {}
 
     let schema = {
@@ -92,6 +92,7 @@ export default async function createItem() {
         emptyObject.increaseAttack = increaseAttack
         emptyObject.increaseDefence = increaseDefence
     }
+    emptyObject.owner = user
 
     return emptyObject
 

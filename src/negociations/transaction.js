@@ -5,31 +5,34 @@ import crypto from 'crypto'
 
 import { Ed25519Sha256 } from 'crypto-conditions'
 
-
-/* 
 const API_PATH = 'http://localhost:9984/api/v1/'
-const alice = new driver.Ed25519Keypair()
 
-const tx = driver.Transaction.makeCreateTransaction(
-    {city: 'São Paulo, BR', temperature: 24, datetime: new Date().toString() },
+export function postItem(user, item) {
 
-    {what: "Alguma coisa"},
+    const tx = driver.Transaction.makeCreateTransaction(
+        item,
+    
+        {what: "A new item"},
+    
+        [
+            driver.Transaction.makeOutput(
+                driver.Transaction.makeEd25519Condition(user.key.publicKey)
+            )
+        ],
+        user.key.publicKey
+    )
 
-    [
-        driver.Transaction.makeOutput(
-            driver.Transaction.makeEd25519Condition(alice.publicKey)
-        )
-    ],
-    alice.publicKey
-)
+    const txSigned = driver.Transaction.signTransaction(tx, user.key.privateKey)
 
-const txSigned = driver.Transaction.signTransaction(tx, alice.privateKey)
+    const conn = new driver.Connection(API_PATH)
 
-const conn = new driver.Connection(API_PATH)
+    conn.postTransactionCommit(txSigned).then(
+        retrievedTx => {
+            console.log('Transaction', retrievedTx.id, 'successfully posted.')
+        }
+    ) 
 
-conn.postTransactionCommit(txSigned).then(
-    retrievedTx => {
-        console.log('Transaction', retrievedTx.id, 'successfully posted.')
-    }
-) */
+}
+
+
 
