@@ -3,11 +3,11 @@ import prompt from 'prompt'
 import createItem from "./src/items/create.js"
 import { postItem } from './src/negociations/transaction.js'
 import { queryOwner } from './src/negociations/queries.js'
-
+import { queryMarket } from "./src/negociations/listMarket.js";
 import driver from 'bigchaindb-driver'
 
 const user = {
-    name: "Alice",
+    name: "Matheus",
     key: new driver.Ed25519Keypair()
 }
 
@@ -26,7 +26,7 @@ prompt.start()
 
 console.log("Select your choice")
 
-console.log("Available choices: (e)xit, (c)reate item, (l)ist items, (n)eagotiate item")
+console.log("Available choices: (e)xit, (c)reate item, (l)ist items, (n)egotiate item")
 
 
 
@@ -40,7 +40,7 @@ while (choice != 'e'){
         postItem(user, item)
 
     } else if (choice == 'n'){
-
+        let listMarket = await queryMarket(user);
 
     } else if (choice == 'l') {
         let itensOwner = queryOwner(user)

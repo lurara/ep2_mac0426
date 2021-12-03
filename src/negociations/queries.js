@@ -43,7 +43,8 @@ export async function queryOwner(owner){
         return response.json()
     })
     let items = []
-
+    console.log("________________________");
+    console.log(data);
     for (let element of data){
        let item = await retrieveTransaction(element.transaction_id)
        

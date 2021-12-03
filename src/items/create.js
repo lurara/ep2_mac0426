@@ -11,10 +11,27 @@ export default async function createItem(user) {
                 message: 'Input the name of the item',
                 required: true
             },
+            forSale: {
+                pattern: /true|false/,
+                message: 'Input "false" for non forSale item and "true" for forSale item',
+                required: true
+            },
             equipable: {
                 pattern: /true|false/,
                 message: 'Input "false" for non equipable item and "true" for equipable item',
                 required: true
+            }
+        }
+    }
+
+    let schemaPrice = {
+        properties: {
+            price: {
+                attack : {
+                pattern: /[0-9]+/,
+                message: 'Input the amount of price of the item',
+                required: true
+            },
             }
         }
     }
@@ -73,8 +90,13 @@ export default async function createItem(user) {
 
     prompt.start()
 
-    const {name, equipable} = await prompt.get(schema)
-    emptyObject.name = name
+    const {name,  forSale, equipable} = await prompt.get(schema)
+    emptyObject.name  = name
+    emptyObject.forSale = forSale
+    if (forSale) {
+        const { price } = await prompt.get(schemaPrice);
+        emptyObject.price = price
+    } 
     if (equipable === "true"){
         emptyObject.equipable = true
 
