@@ -6,10 +6,6 @@ import { queryOwner } from './src/negociations/queries.js'
 import { queryMarket } from "./src/negociations/listMarket.js";
 import driver from 'bigchaindb-driver'
 
-const user = {
-    name: "Matheus",
-    key: new driver.Ed25519Keypair()
-}
 
 let schema = {
     properpeties:{
@@ -23,6 +19,16 @@ let schema = {
 
 
 prompt.start()
+
+console.log("type your name")
+
+let name = (await prompt.get(["name"])).question
+
+
+const user = {
+    name: name,
+    key: new driver.Ed25519Keypair()
+}
 
 console.log("Select your choice")
 
@@ -47,7 +53,7 @@ while (choice != 'e'){
         console.log("This is the items you have:")
         let result = await itensOwner
         result.forEach(element => {
-            console.log(element.asset.data)
+            console.log(element.metadata.info)
         })
     }
 

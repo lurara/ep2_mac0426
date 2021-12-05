@@ -12,7 +12,7 @@ export function postItem(user, item) {
     const tx = driver.Transaction.makeCreateTransaction(
         item,
     
-        {what: "A new item"},
+        {info: item},
     
         [
             driver.Transaction.makeOutput(
@@ -30,7 +30,7 @@ export function postItem(user, item) {
         retrievedTx => {
             console.log('Transaction', retrievedTx.id, 'successfully posted.')
         }
-    ) 
+    )
 
 }
 

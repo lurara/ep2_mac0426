@@ -11,17 +11,15 @@ function isArray(what) {
 }
 
 
-
-
 export async function queryMarket(user){
     let schema = {
-      properties: {
-        id: {
-          pattern: /[A-z0-9]+/,
-          message: "Input the id of the item you want",
-          required: true,
+        properties: {
+            id: {
+                pattern: /[A-z0-9]+/,
+                message: "Input the id of the item you want",
+                required: true,
+            },
         },
-      },
     };
 
     let data = await fetch(`http://localhost:9984/api/v1/assets/?search=true`).then((response) => {
@@ -41,13 +39,30 @@ export async function queryMarket(user){
         return response.json()
     })
     const transaction = data[0]
-    console.log(transaction)
+    
+    let txCreated = await conn.getTransaction(transaction.transaction_id)
+    console.log(txCreated)
+    //txCreated.asset.data.owner = user
     const transfer = driver.Transaction.makeTransferTransaction(
-      [transaction],
-      [
-        driver.Transaction.makeOutput(
-          driver.Transaction.makeEd25519Condition(user.key.publicKey)
-        ),
-      ]
-    );
+        [{
+            tx: txCreated,
+            output_index: transaction.output_index
+        }],
+        [
+            driver.Transaction.makeOutput(
+                driver.Transaction.makeEd25519Condition(user.key.publicKey)
+            ),
+        ],
+        {
+            info: txCreated.metadata
+        }
+    )
+    
+    const signedTranfer = driver.Transaction.signTransaction(transfer, item.data.owner.key.privateKey)
+    console.log(signedTranfer)
+    conn.postTransactionCommit(signedTranfer).then(
+        retrievedTx => {
+            console.log('Transaction', retrievedTx.id, 'successfully posted.')
+        }
+    )
 }

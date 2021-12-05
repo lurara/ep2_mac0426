@@ -27,11 +27,9 @@ export default async function createItem(user) {
     let schemaPrice = {
         properties: {
             price: {
-                attack : {
                 pattern: /[0-9]+/,
                 message: 'Input the amount of price of the item',
                 required: true
-            },
             }
         }
     }
