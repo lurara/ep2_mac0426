@@ -5,7 +5,7 @@ import fetch from 'node-fetch'
 const API_PATH = 'http://localhost:9984/api/v1/'
 const conn = new driver.Connection(API_PATH)
 
-async function getSortedTransactions (assetId) {
+/* async function getSortedTransactions (assetId) {
     let metaData = {}
     let result = await conn.listTransactions(assetId)
     if (result.length <= 1){
@@ -31,18 +31,19 @@ async function retrieveTransaction(transaction_id) {
         data.metadata = metadata
     }
     return data
-}
+} */
 
-export async function queryOwner(owner){
+export async function queryOwner(owner, interactive){
 
     let data = await fetch(`http://localhost:9984/api/v1/outputs?public_key=${owner.key.publicKey}&spent=false`).then((response) => {
         return response.json()
     })
     //NATHAN try search assets here
     let items = []
-
-    console.log("________________________");
-    console.log(data);
+    if (interactive){
+        console.log("________________________");
+        console.log(data);
+    }
     for (let element of data){
        //let item = await retrieveTransaction(element.transaction_id)
        let teste = await conn.getTransaction(element.transaction_id)

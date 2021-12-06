@@ -43,13 +43,13 @@ while (choice != 'e'){
     if (choice == 'c'){
         let item = await createItem(user)
         console.log(item)
-        postItem(user, item)
+        await postItem(user, item)
 
     } else if (choice == 'n'){
-        let listMarket = await queryMarket(user);
+        let listMarket = await queryMarket(user, true);
 
     } else if (choice == 'l') {
-        let itensOwner = queryOwner(user)
+        let itensOwner = queryOwner(user, true)
         console.log("This is the items you have:")
         let result = await itensOwner
         result.forEach(element => {

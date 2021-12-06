@@ -7,7 +7,7 @@ import { Ed25519Sha256 } from 'crypto-conditions'
 
 const API_PATH = 'http://localhost:9984/api/v1/'
 
-export function postItem(user, item) {
+export async function postItem(user, item) {
 
     const tx = driver.Transaction.makeCreateTransaction(
         item,
@@ -25,12 +25,15 @@ export function postItem(user, item) {
     const txSigned = driver.Transaction.signTransaction(tx, user.key.privateKey)
 
     const conn = new driver.Connection(API_PATH)
-
-    conn.postTransactionCommit(txSigned).then(
-        retrievedTx => {
-            console.log('Transaction', retrievedTx.id, 'successfully posted.')
-        }
-    )
+    let retrievedTx
+    try {
+        retrievedTx = await conn.postTransactionCommit(txSigned)
+    }
+    catch (e){
+        console.log(e)
+    }
+    
+    //console.log('Transaction', retrievedTx.id, 'successfully posted.')
 
 }
 
