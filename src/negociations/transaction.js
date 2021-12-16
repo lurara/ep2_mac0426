@@ -12,7 +12,7 @@ export async function postItem(user, item) {
     const tx = driver.Transaction.makeCreateTransaction(
         item,
     
-        {info: item},
+        item,
     
         [
             driver.Transaction.makeOutput(

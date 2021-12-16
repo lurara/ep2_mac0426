@@ -6,7 +6,7 @@ import driver from 'bigchaindb-driver'
 
 let measurements = 10
 let users = 100
-let step = 20
+let step = 100
 
 const random = (min, max) => Math.floor(Math.random() * (max - min)) + min
 
@@ -42,7 +42,7 @@ let end
 
 // Measure post speed
 
-for (let i = 0; i < measurements; i++){
+/* for (let i = 0; i < measurements; i++){
     
     let promisses = []
     start = Date.now()
@@ -61,7 +61,7 @@ for (let i = 0; i < measurements; i++){
     timePerformancesPostItem.push(Date.now() - start)
 }
 
-console.log(timePerformancesPostItem)
+console.log(timePerformancesPostItem) */
 
 
 // Measure list performance
@@ -85,7 +85,7 @@ console.log(timePerformancesQueryItem)
 
 // Measure negotiate performacnce
 
-for (let i = 0; i < measurements; i++){
+/* for (let i = 0; i < measurements; i++){
     
     let promisses = []
     start = Date.now()
@@ -100,4 +100,4 @@ for (let i = 0; i < measurements; i++){
     timePerformancesNegotiateItem.push(Date.now() - start)
 }
 
-console.log(timePerformancesNegotiateItem)
+console.log(timePerformancesNegotiateItem) */

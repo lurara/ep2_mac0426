@@ -52,8 +52,9 @@ while (choice != 'e'){
         let itensOwner = queryOwner(user, true)
         console.log("This is the items you have:")
         let result = await itensOwner
+        console.log(result)
         result.forEach(element => {
-            console.log(element.metadata.info)
+            console.log(element.metadata)
         })
     }
 

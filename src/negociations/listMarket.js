@@ -21,7 +21,7 @@ export async function queryMarket(user, interactive){
                 required: true,
             },
         },
-    };
+    }
 
     try{
         let data = await fetch(`http://localhost:9984/api/v1/assets/?search=true`).then((response) => {
@@ -37,7 +37,7 @@ export async function queryMarket(user, interactive){
         }
         let id
         if (interactive){
-            id = (await prompt.get(schema)).question
+            id = (await prompt.get(schema)).id
         } else {
             id = data[random(0, data.length)].id
         }
@@ -49,15 +49,15 @@ export async function queryMarket(user, interactive){
         let meta = await conn.listTransactions(id)
 
         //console.log(item.data.owner.key.publicKey);
-        data = await fetch(`http://localhost:9984/api/v1/outputs?public_key=${meta[meta.length - 1].metadata.info.owner.key.publicKey}`).then((response) => {
+        data = await fetch(`http://localhost:9984/api/v1/outputs?public_key=${meta[meta.length - 1].metadata.owner.key.publicKey}`).then((response) => {
             return response.json()
         })
         const transaction = data[0]
         
         let txCreated = await conn.getTransaction(transaction.transaction_id)
         //console.log(txCreated)
-        let previousOwner = txCreated.metadata.info.owner
-        txCreated.metadata.info.owner = user
+        let previousOwner = txCreated.metadata.owner
+        txCreated.metadata.owner = user
         const transfer = driver.Transaction.makeTransferTransaction(
             [{
                 tx: txCreated,
@@ -68,9 +68,7 @@ export async function queryMarket(user, interactive){
                     driver.Transaction.makeEd25519Condition(user.key.publicKey)
                 ),
             ],
-            {
-                info: txCreated.metadata.info
-            }
+                txCreated.metadata
         )
         
         const signedTranfer = driver.Transaction.signTransaction(transfer, previousOwner.key.privateKey)
